@@ -1,0 +1,31 @@
+{
+  "name": "xkitchenapi",
+  "version": "1.0.0",
+  "description": "Xsis Kitchen Application",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/drajat2610/XKitchenAPI.git"
+  },
+  "keywords": [
+    "restfull"
+  ],
+  "author": "Drajat Pamuji",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/drajat2610/XKitchenAPI/issues"
+  },
+  "homepage": "https://github.com/drajat2610/XKitchenAPI#readme",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.3",
+    "mongoose": "^5.0.10"
+  },
+  "devDependencies": {
+    "nodemon": "^1.17.1"
+  }
+}
