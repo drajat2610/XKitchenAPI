@@ -2,13 +2,14 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 
-//Reservations Model
-const Reservation = require('../models/reservation');
+//Orders model
+const Order = require('../models/order');
 //get all
 router.get('/', (req, res, next) => {
-    Reservation.find()
-        .populate('table', 'code seat decription')
-        .populate('user', 'badgeId nick fullName')
+    Order.find()
+        .populate('reservation', 'guest reference createDate')
+        .populate('product', 'code initial name description price')
+        .populate('user', 'userId badgeId  nick')
         .exec()
         .then(doc => {
             res.status(200).json(doc);
@@ -22,16 +23,19 @@ router.get('/', (req, res, next) => {
 });
 //insert
 router.post('/', (req, res, next) => {
-    const newReservation = new Reservation({
+    const newOrder = new Order({
         _id: new mongoose.Types.ObjectId(),
-        reference: req.body.reference,
-        table: req.body.table,
+        reservation: req.body.reservation,
+        product: req.body.product,
         user: req.body.user,
-        guest: req.body.guest,
-        createDate: req.body.createDate
+        status: req.body.status,
+        quantity: req.body.quantity,
+        createDate: req.body.createDate,
+        lastStatus: req.body.lastStatus,
+        lastTime: req.body.lastTime
     });
 
-    newReservation.save()
+    newOrder.save()
         .then(result => {
             console.log(result);
             res.status(201).json(result);
@@ -47,9 +51,10 @@ router.post('/', (req, res, next) => {
 //get by id
 router.get('/:id', (req, res, next) => {
     const id = req.params.id;
-    Reservation.findById(id)
-    .populate('table', 'code seat decription')
-    .populate('user', 'badgeId nick fullName')
+    Order.findById(id)
+        .populate('reservation', 'guest reference createDate')
+        .populate('product', 'code initial name description price')
+        .populate('user', 'userId badgeId  nick')
         .exec()
         .then(result => {
             console.log(result);
@@ -72,7 +77,7 @@ router.patch('/:id', (req, res, next) => {
         updateOps[ops.propName] = ops.value;
     }
 
-    Reservation.update({ _id: id }, { $set: updateOps })
+    Order.update({ _id: id }, { $set: updateOps })
         .exec()
         .then(result => {
             res.status(200).json(result);
@@ -88,7 +93,7 @@ router.patch('/:id', (req, res, next) => {
 //delete
 router.delete('/:id', (req, res, next) => {
     const id = req.params.id;
-    Reservation.remove({ _id: id })
+    Order.remove({ _id: id })
         .exec()
         .then(result => {
             res.status(200).json(result);
