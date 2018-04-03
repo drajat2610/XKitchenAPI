@@ -65,13 +65,13 @@ router.get('/:id', (req, res, next) => {
 //update
 router.patch('/:id', (req, res, next) => {
     const id = req.params.id;
-    const updateOps = {};
+    // const updateOps = {};
 
-    for(const ops of req.body){
-        updateOps[ops.propName] = ops.value;   
-    }
+    // for(const ops of req.body){
+    //     updateOps[ops.propName] = ops.value;   
+    // }
 
-    Product.update({ _id : id }, { $set : updateOps })
+    Product.update({ _id : id }, { $set : req.body })
         .exec()
         .then(result => {
             res.status(200).json(result);

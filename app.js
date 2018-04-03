@@ -13,15 +13,14 @@ const reservationRouter = require('./api/routers/reservations');
 const orderRouter = require('./api/routers/orders');
 
 //Connecting to MongoDB
-// mongoose.connect('mongodb://localhost:27017/XKitchen');
-mongoose.connect('mongodb://admin:admin12345@ds215759.mlab.com:15759/xkitchen')
+mongoose.connect('mongodb://localhost:27017/XKitchen');
+//mongoose.connect('mongodb://admin:admin12345@ds215759.mlab.com:15759/xkitchen')
 mongoose.Promise = global.Promise;
 
 app.use(bodyParser.urlencoded({extended: false }));
 app.use(bodyParser.json());
 
 
-//access untuk beda port API
 app.use((req, res, next)=>{
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");

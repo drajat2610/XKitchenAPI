@@ -60,13 +60,13 @@ router.get('/:id', (req, res, next) => {
 //update
 router.patch('/:id', (req, res, next) => {
     const id = req.params.id;
-    const updateOps = {};
+    // const updateOps = {}; //dihapus
 
-    for(const ops of req.body){
-        updateOps[ops.propName] = ops.value;   
-    }
+    // for(const ops of req.body){ //dihapus
+    //     updateOps[ops.propName] = ops.value;   
+    // }
 
-    Table.update({ _id : id }, { $set : updateOps })
+    Table.update({ _id : id }, { $set : req.body }) // req.body
         .exec()
         .then(result => {
             res.status(200).json(result);

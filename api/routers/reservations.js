@@ -22,34 +22,54 @@ router.get('/', (req, res, next) => {
 });
 //insert
 router.post('/', (req, res, next) => {
-    const newReservation = new Reservation({
-        _id: new mongoose.Types.ObjectId(),
-        reference: req.body.reference,
-        table: req.body.table,
-        user: req.body.user,
-        guest: req.body.guest,
-        createDate: req.body.createDate
-    });
+    GetNewReference(response => {
+        const newReservation = new Reservation({
+            _id: new mongoose.Types.ObjectId(),
+            table: req.body.table,
+            user: req.body.user,
+            reference: response,
+            guest: req.body.guest,
+            paid: req.body.paid
+        });
 
-    newReservation.save()
-        .then(result => {
-            console.log(result);
-            res.status(201).json(result);
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(500).json({
-                error: err
+        newReservation.save()
+            .then(result => {
+                console.log(result);
+                res.status(201).json(result);
+            })
+            .catch(err => {
+                console.log(err);
+                res.status(500).json({
+                    error: err
+                });
             });
-        })
+    });
 });
+
+function GetNewReference(callback) {
+    var newRef = "SLS-" + new Date().getFullYear().toString().substr(-2) + ("0" + (new Date().getMonth() + 1)).slice(-2) + "-";
+    var lastRef = newRef + "0001";
+
+    Reservation.findOne({ reference: new RegExp(newRef, 'i') })
+        .sort({ reference: -1 })
+        .exec((err, doc) => {
+            if (doc != null) {
+                var arr = doc.reference.split("-");
+                var inc = parseInt(arr[2]) + 1;
+                lastRef = newRef + ("0000" + inc).slice(-4);
+                return callback(lastRef);
+            } else {
+                return callback(lastRef);
+            }
+        });
+}
 
 //get by id
 router.get('/:id', (req, res, next) => {
     const id = req.params.id;
     Reservation.findById(id)
-    .populate('table', 'code seat decription')
-    .populate('user', 'badgeId nick fullName')
+        .populate('table', 'code seat decription')
+        .populate('user', 'badgeId nick fullName')
         .exec()
         .then(result => {
             console.log(result);
