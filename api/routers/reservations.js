@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 
 //Reservations Model
 const Reservation = require('../models/reservation');
+const Table = require('../models/table');
 //get all
 router.get('/', (req, res, next) => {
     Reservation.find()
@@ -100,6 +101,10 @@ function GetNewReference(callback) {
 
 //get by id
 router.get('/:id', (req, res, next) => {
+    console.log("Return form GetNew : ");
+    GetNewReference(response => {
+        console.log(response);
+    });
     const id = req.params.id;
     Reservation.findById(id)
         .populate('table', 'code seat decription')
@@ -120,11 +125,6 @@ router.get('/:id', (req, res, next) => {
 //update
 router.patch('/:id', (req, res, next) => {
     const id = req.params.id;
-    // const updateOps = {};
-
-    // for (const ops of req.body) {
-    //     updateOps[ops.propName] = ops.value;
-    // }
 
     Reservation.update({ _id: id }, { $set: req.body })
         .exec()

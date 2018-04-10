@@ -65,11 +65,6 @@ router.get('/:id', (req, res, next) => {
 //update
 router.patch('/:id', (req, res, next) => {
     const id = req.params.id;
-    // const updateOps = {};
-
-    // for(const ops of req.body){
-    //     updateOps[ops.propName] = ops.value;   
-    // }
 
     Product.update({ _id : id }, { $set : req.body })
         .exec()

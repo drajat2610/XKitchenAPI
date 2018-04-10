@@ -28,11 +28,7 @@ router.post('/', (req, res, next) => {
         reservation: req.body.reservation,
         product: req.body.product,
         user: req.body.user,
-        status: req.body.status,
-        quantity: req.body.quantity,
-        createDate: req.body.createDate,
-        lastStatus: req.body.lastStatus,
-        lastTime: req.body.lastTime
+        quantity: req.body.quantity
     });
 
     newOrder.save()
@@ -71,13 +67,8 @@ router.get('/:id', (req, res, next) => {
 //update
 router.patch('/:id', (req, res, next) => {
     const id = req.params.id;
-    const updateOps = {};
 
-    for (const ops of req.body) {
-        updateOps[ops.propName] = ops.value;
-    }
-
-    Order.update({ _id: id }, { $set: updateOps })
+    Order.update({ _id: id }, { $set: req.body })
         .exec()
         .then(result => {
             res.status(200).json(result);
